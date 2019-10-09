@@ -3,9 +3,15 @@ using ConsoleAdventure.Project.Interfaces;
 
 namespace ConsoleAdventure.Project.Models
 {
-    public class Player : IPlayer
+  public class Player : IPlayer
+  {
+    public Player(string name, List<Item> inventory)
     {
-        public string Name { get; set; }
-        public List<Item> Inventory { get; set; }
+      Name = name;
+      Inventory = inventory;
     }
+
+    public string Name { get; set; }
+    public List<Item> Inventory { get; set; }
+  }
 }
