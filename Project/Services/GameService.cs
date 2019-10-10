@@ -22,27 +22,8 @@ namespace ConsoleAdventure.Project
     public void Setup(string playerName)
     {
       Player player = new Player(playerName, new List<Item>());
-      Item lockpick = new Item("Lockpick", "A simple toothpick. What idiot left this with the prisoner?", "unlock");
-      Item sixshooter = new Item("Gun", "This is your six-shooter. Deadeye Doughboy took it from you before he locked you up.", "shoot");
-      Item horse = new Item("Horse", "Peanut the butter horse. By day, a stick of butter. By night, your noble steed.", "ride");
-      Room breadbox = new Room("Breadbox", "You're in the breadbox. The Deadeye locked you in here after he killed the sheriff. If the door is unlocked, you can exit to the east.", new List<Item> { lockpick }, false, true);
-      Room countertop = new Room("Countertop", "The countertop, the outside portion of The Kitchen. This is where the appliances are. The breadbox is to the west, and the fridge is to the east. You could also go south...", new List<Item> { sixshooter }, false, false);
-      Room fridge = new Room("Fridge", "The fridge, where the cold things are kept. Most importantly, your horse. You could go back west to the countertop, or ride your horse to the toaster, where the Deadeye waits for the final showdown.", new List<Item> { horse }, false, false);
-      Room blender = new Room("Blender", "You've walked off the edge of the countertop, and fallen into a clear cup-shaped object, with blades below you.\nYou look outside, and spot Deadeye Doughboy, staring right at you.\nYou realize you've fallen into the blender, and your nemesis is at the controls...\n GAME OVER", new List<Item>(), true, false);
-      Room toaster = new Room("Toaster", "You stand atop the toaster, staring down the heel of the loaf, Deadeye Doughboy. \"This kitchen ain't big enough for the two of us,\" He tells you. The clock strikes high noon, and you draw your gun. If you win, you save the town. If you lose, you're toast.", new List<Item>(), false, false);
-      breadbox.Exits.Add("east", countertop);
-      breadbox.Exits.Add("somewhere", toaster);
-      countertop.Exits.Add("east", fridge);
-      countertop.Exits.Add("west", breadbox);
-      countertop.Exits.Add("south", blender);
-      fridge.Exits.Add("west", countertop);
-      Rooms.Add(breadbox);
-      Rooms.Add(countertop);
-      Rooms.Add(fridge);
-      Rooms.Add(blender);
-      Rooms.Add(toaster);
-      _game.CurrentRoom = breadbox;
       _game.CurrentPlayer = player;
+      _game.Setup();
     }
     public void Go(string direction)
     {
@@ -55,12 +36,7 @@ namespace ConsoleAdventure.Project
         else
         {
           _game.CurrentRoom = _game.CurrentRoom.Exits[direction];
-          Messages.Add(_game.CurrentRoom.Description);
-          Messages.Add("This room contains:");
-          foreach (Item i in _game.CurrentRoom.Items)
-          {
-            Messages.Add(i.Name);
-          }
+          Look();
         }
       }
     }
@@ -78,6 +54,7 @@ help");
 
     public void Inventory()
     {
+      Messages.Add("You are holding:");
       foreach (Item i in _game.CurrentPlayer.Inventory)
       {
         Messages.Add($"{i.Name} - {i.Description}");
@@ -87,7 +64,10 @@ help");
     public void Look()
     {
       Messages.Add(_game.CurrentRoom.Description);
-      Messages.Add("This area contains:");
+      if (_game.CurrentRoom.Items.Count > 0)
+      {
+        Messages.Add("This area contains:");
+      }
       foreach (Item i in _game.CurrentRoom.Items)
       {
         Messages.Add(i.Name);
@@ -140,7 +120,7 @@ help");
       }
       else
       {
-        Messages.Add("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        Messages.Add("There's no item called " + itemName + " in this area.");
       }
     }
     ///<summary>
@@ -158,7 +138,11 @@ help");
           item = i;
         }
       }
-      if (item.Action == "unlock" && _game.CurrentRoom.Locked)
+      if (item.Name == null)
+      {
+        Messages.Add("You don't have an item called " + itemName + ".");
+      }
+      else if (item.Action == "unlock" && _game.CurrentRoom.Locked)
       {
         _game.CurrentRoom.Locked = false;
         Messages.Add("Door unlocked!");

@@ -79,6 +79,9 @@ namespace ConsoleAdventure.Project.Controllers
           _gameService.Help();
           Print();
           break;
+        default:
+          System.Console.WriteLine("You don't know how to do " + command);
+          break;
       }
     }
 
@@ -103,7 +106,22 @@ namespace ConsoleAdventure.Project.Controllers
           string d = Console.ReadLine();
           if (d.ToLower() == "draw")
           {
-            Console.WriteLine("As soon as you hear the word ring out, you draw your gun and fire. You look up and see the Deadeye clutching his chest. Soon, he falls into the toaster slot, and you push down the lever. The duel is over. You've won, you've saved the town!");
+            Console.WriteLine(@"As soon as you hear the word ring out, you draw your gun and fire. You look up and see the Deadeye clutching his chest. Soon, he falls into the toaster slot, and you push down the lever. The duel is over. You've won, you've saved the town!");
+            System.Console.WriteLine(@"
+  (                                 _
+   )                               /=>
+  (  +____________________/\/\___ / /|
+   .''._____________'._____      / /|/\
+  : () :              :\ ----\|    \ )
+   '..'______________.'0|----|      \
+                    0_0/____/        \
+                        |----    /----\
+                       || -\\ --|      \
+                       ||   || ||\      \
+                        \\____// '|      \
+                                .'/       |
+                               .:/        |
+                               :/_________|");
             _gameService.Quit();
           }
         }
@@ -112,32 +130,13 @@ namespace ConsoleAdventure.Project.Controllers
         {
           Console.WriteLine("DRAW!");
         }
-        if (time++ > 3)
+        if (time++ > 2)
         {
-          Console.WriteLine("You were too slow. Just as you reach for your gun, the Deadeye puts a bullet in you. You fall into the toaster, everything starts heating up, and your vision fades away... \nGAME OVER");
+          Console.WriteLine(@"You were too slow. Just as you reach for your gun, the Deadeye puts a bullet in you. You fall into the toaster, everything starts heating up, and your vision fades away...
+GAME OVER
+");
           _gameService.Quit();
         }
-      }
-    }
-
-    public void FirstTick(Object obj)
-    {
-      System.Console.WriteLine("DRAW!");
-      Timer timer = new Timer(TimerTick, null, 1000, 1000);
-      Drawn = Console.ReadLine().ToLower();
-      Console.WriteLine(Drawn);
-    }
-    public void TimerTick(Object obj)
-    {
-      ending = false;
-      if (Drawn == "draw")
-      {
-
-      }
-      else
-      {
-        System.Console.WriteLine("You typed: " + Drawn);
-
       }
     }
 
