@@ -31,11 +31,11 @@ namespace ConsoleAdventure.Project
       Room blender = new Room("Blender", "You've walked off the edge of the countertop, and fallen into a clear cup-shaped object, with blades below you.\nYou look outside, and spot Deadeye Doughboy, staring right at you.\nYou realize you've fallen into the blender, and your nemesis is at the controls...\n GAME OVER", new List<Item>(), true, false);
       Room toaster = new Room("Toaster", "You stand atop the toaster, staring down the heel of the loaf, Deadeye Doughboy. \"This kitchen ain't big enough for the two of us,\" He tells you. The clock strikes high noon, and you draw your gun. If you win, you save the town. If you lose, you're toast.", new List<Item>(), false, false);
       breadbox.Exits.Add("east", countertop);
+      breadbox.Exits.Add("somewhere", toaster);
       countertop.Exits.Add("east", fridge);
       countertop.Exits.Add("west", breadbox);
       countertop.Exits.Add("south", blender);
       fridge.Exits.Add("west", countertop);
-      fridge.Exits.Add("south", toaster);
       Rooms.Add(breadbox);
       Rooms.Add(countertop);
       Rooms.Add(fridge);
@@ -109,6 +109,18 @@ help");
     {
       return _game.CurrentRoom.Trapped;
     }
+    public bool DoesntHaveGun()
+    {
+      bool gun = true;
+      foreach (Item i in _game.CurrentPlayer.Inventory)
+      {
+        if (i.Name == "Gun")
+        {
+          gun = false;
+        }
+      }
+      return gun;
+    }
 
     ///<summary>When taking an item be sure the item is in the current room before adding it to the player inventory, Also don't forget to remove the item from the room it was picked up in</summary>
     public void TakeItem(string itemName)
@@ -125,6 +137,10 @@ help");
       {
         _game.CurrentPlayer.Inventory.Add(item);
         _game.CurrentRoom.Items.Remove(item);
+      }
+      else
+      {
+        Messages.Add("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
       }
     }
     ///<summary>

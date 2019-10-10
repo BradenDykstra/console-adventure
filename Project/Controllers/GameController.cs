@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using ConsoleAdventure.Project.Interfaces;
 using ConsoleAdventure.Project.Models;
-using System.Timers;
+using System.Threading;
 
 namespace ConsoleAdventure.Project.Controllers
 {
@@ -84,39 +84,60 @@ namespace ConsoleAdventure.Project.Controllers
 
     private void EndGame()
     {
-      Timer firstTimer = new Timer(5000);
-      firstTimer.AutoReset = false;
-      firstTimer.Elapsed += FirstTick;
+      // Timer firstTimer = new Timer(FirstTick, null, 5000, 5000);
       Console.Clear();
       Print();
       System.Console.WriteLine("To win the duel, you have to type draw as fast as possible after the screen says 'Draw'. Press enter when you're ready to begin the duel.");
       Console.ReadLine();
-      System.Console.WriteLine("The clock strikes high noon...");
-      firstTimer.Start();
+      Console.WriteLine("The clock strikes high noon...");
+      int time = 1;
+      while (true)
+      {
+        if (Console.KeyAvailable)
+        {
+          if (_gameService.DoesntHaveGun())
+          {
+            Console.WriteLine("You reach for the gun, but quickly realize it isn't there. You remember seeing your gun on the countertop. You have little time for regrets as the Deadeye shoots you between the eyes.\nGAME OVER");
+            _gameService.Quit();
+          }
+          string d = Console.ReadLine();
+          if (d.ToLower() == "draw")
+          {
+            Console.WriteLine("As soon as you hear the word ring out, you draw your gun and fire. You look up and see the Deadeye clutching his chest. Soon, he falls into the toaster slot, and you push down the lever. The duel is over. You've won, you've saved the town!");
+            _gameService.Quit();
+          }
+        }
+        Thread.Sleep(1000);
+        if (time < 2)
+        {
+          Console.WriteLine("DRAW!");
+        }
+        if (time++ > 3)
+        {
+          Console.WriteLine("You were too slow. Just as you reach for your gun, the Deadeye puts a bullet in you. You fall into the toaster, everything starts heating up, and your vision fades away... \nGAME OVER");
+          _gameService.Quit();
+        }
+      }
     }
 
-    public void FirstTick(Object obj, ElapsedEventArgs e)
+    public void FirstTick(Object obj)
     {
       System.Console.WriteLine("DRAW!");
-      Timer timer = new Timer(1000);
-      timer.AutoReset = false;
-      timer.Elapsed += TimerTick;
+      Timer timer = new Timer(TimerTick, null, 1000, 1000);
       Drawn = Console.ReadLine().ToLower();
-      timer.Start();
+      Console.WriteLine(Drawn);
     }
-    public void TimerTick(Object obj, ElapsedEventArgs e)
+    public void TimerTick(Object obj)
     {
       ending = false;
       if (Drawn == "draw")
       {
-        System.Console.WriteLine("As soon as you hear the word ring out, you draw your gun and fire. You look up and see the Deadeye clutching his chest. Soon, he falls into the toaster slot, and you push down the lever. The duel is over. You've won, you've saved the town!");
-        _gameService.Quit();
+
       }
       else
       {
         System.Console.WriteLine("You typed: " + Drawn);
-        System.Console.WriteLine("You were too slow. Just as you reach for your gun, the Deadeye puts a bullet in you. You fall into the toaster, everything starts heating up, and your vision fades away... \nGAME OVER");
-        _gameService.Quit();
+
       }
     }
 
