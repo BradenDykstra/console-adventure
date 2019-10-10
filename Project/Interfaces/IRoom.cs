@@ -11,5 +11,7 @@ namespace ConsoleAdventure.Project.Interfaces
     Dictionary<string, IRoom> Exits { get; set; }
 
     bool Trapped { get; set; }
+
+    bool Locked { get; set; }
   }
 }

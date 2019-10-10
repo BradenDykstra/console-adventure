@@ -5,13 +5,14 @@ namespace ConsoleAdventure.Project.Models
 {
   public class Room : IRoom
   {
-    public Room(string name, string description, List<Item> items, bool trapped)
+    public Room(string name, string description, List<Item> items, bool trapped, bool locked)
     {
       Name = name;
       Description = description;
       Items = items;
       Exits = new Dictionary<string, IRoom>();
       Trapped = trapped;
+      Locked = locked;
     }
 
     public string Name { get; set; }
@@ -20,6 +21,8 @@ namespace ConsoleAdventure.Project.Models
     public Dictionary<string, IRoom> Exits { get; set; }
 
     public bool Trapped { get; set; }
+
+    public bool Locked { get; set; }
 
 
   }
