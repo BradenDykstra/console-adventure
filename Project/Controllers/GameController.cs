@@ -11,11 +11,7 @@ namespace ConsoleAdventure.Project.Controllers
   {
     private GameService _gameService = new GameService();
 
-    private string Drawn = "";
-
     private bool playing = true;
-
-    private bool ending = false;
 
     //NOTE Makes sure everything is called to finish Setup and Starts the Game loop
     public void Run()
@@ -80,7 +76,7 @@ namespace ConsoleAdventure.Project.Controllers
           Print();
           break;
         default:
-          System.Console.WriteLine("You don't know how to do " + command);
+          System.Console.WriteLine("You don't know how to " + command);
           break;
       }
     }
@@ -100,7 +96,7 @@ namespace ConsoleAdventure.Project.Controllers
         {
           if (_gameService.DoesntHaveGun())
           {
-            Console.WriteLine("You reach for the gun, but quickly realize it isn't there. You remember seeing your gun on the countertop. You have little time for regrets as the Deadeye shoots you between the eyes.\nGAME OVER");
+            Console.WriteLine("You reach for the gun, but quickly realize it isn't there. You remember the deadeye saying something about putting your gun in the freezer. You have little time for regrets as the Deadeye shoots you between the eyes.\nGAME OVER");
             _gameService.Quit();
           }
           string d = Console.ReadLine();

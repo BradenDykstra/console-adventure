@@ -43,13 +43,13 @@ namespace ConsoleAdventure.Project
     public void Help()
     {
       Messages.Add(@"Commands:
-inventory
-look
-go <direction>
-quit
-take <item>
-use <item>
-help");
+inventory       -Look at all the items in your inventory
+look            -Look around the room
+go <direction>  -Travel through the exit in the specified direction
+quit            -Quit the game
+take <item>     -Take an item in the room
+use <item>      -Use an item from your inventory
+help            -Show this menu");
     }
 
     public void Inventory()
@@ -71,6 +71,14 @@ help");
       foreach (Item i in _game.CurrentRoom.Items)
       {
         Messages.Add(i.Name);
+      }
+      if (_game.CurrentRoom.Exits.Count > 0)
+      {
+        Messages.Add("There are exits to the:");
+      }
+      foreach (KeyValuePair<string, IRoom> Exit in _game.CurrentRoom.Exits)
+      {
+        Messages.Add(Exit.Key);
       }
     }
 
@@ -117,6 +125,7 @@ help");
       {
         _game.CurrentPlayer.Inventory.Add(item);
         _game.CurrentRoom.Items.Remove(item);
+        Messages.Add("You're now carrying a " + item.Name);
       }
       else
       {
@@ -152,6 +161,14 @@ help");
         _game.CurrentRoom = new Room("Toaster", "You stand atop the toaster, staring down the heel of the loaf, Deadeye Doughboy. \"This kitchen ain't big enough for the two of us,\" He tells you. The duel is at high noon, and the clock is just about there. If you win, you save the town. If you lose, you're toast.", new List<Item>(), false, false);
         Messages.Add(_game.CurrentRoom.Description);
         return true;
+      }
+      else if (item.Action == "climb" && _game.CurrentRoom.Name == "Fridge")
+      {
+        IRoom fridge = _game.CurrentRoom;
+        Item sixshooter = new Item("Gun", "This is your six-shooter. Deadeye Doughboy took it from you before he locked you up.", "shoot");
+        _game.CurrentRoom = new Room("Freezer", "The freezer, where the coldest things are kept. You could go back down to the fridge from here.", new List<Item> { sixshooter }, false, false);
+        _game.CurrentRoom.Exits.Add("down", fridge);
+        Look();
       }
       return false;
     }
