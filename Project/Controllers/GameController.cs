@@ -50,7 +50,7 @@ namespace ConsoleAdventure.Project.Controllers
           Print();
           if (_gameService.CheckTrap())
           {
-            _gameService.Quit();
+            Environment.Exit(0);
           }
           break;
         case "quit":
@@ -75,6 +75,9 @@ namespace ConsoleAdventure.Project.Controllers
           _gameService.Help();
           Print();
           break;
+        case "reset":
+          Run();
+          break;
         default:
           System.Console.WriteLine("You don't know how to " + command);
           break;
@@ -97,7 +100,7 @@ namespace ConsoleAdventure.Project.Controllers
           if (_gameService.DoesntHaveGun())
           {
             Console.WriteLine("You reach for the gun, but quickly realize it isn't there. You remember the deadeye saying something about putting your gun in the freezer. You have little time for regrets as the Deadeye shoots you between the eyes.\nGAME OVER");
-            _gameService.Quit();
+            Environment.Exit(0);
           }
           string d = Console.ReadLine();
           if (d.ToLower() == "draw")
@@ -118,7 +121,7 @@ namespace ConsoleAdventure.Project.Controllers
                                 .'/       |
                                .:/        |
                                :/_________|");
-            _gameService.Quit();
+            Environment.Exit(0);
           }
         }
         Thread.Sleep(1000);
@@ -131,7 +134,7 @@ namespace ConsoleAdventure.Project.Controllers
           Console.WriteLine(@"You were too slow. Just as you reach for your gun, the Deadeye puts a bullet in you. You fall into the toaster, everything starts heating up, and your vision fades away...
 GAME OVER
 ");
-          _gameService.Quit();
+          Environment.Exit(0);
         }
       }
     }
